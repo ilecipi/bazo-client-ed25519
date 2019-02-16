@@ -120,8 +120,8 @@ func CreateFundsTxEndpoint(w http.ResponseWriter, req *http.Request) {
 
 	params := mux.Vars(req)
 
-	var fromPub [64]byte
-	var toPub [64]byte
+	var fromPub [32]byte
+	var toPub [32]byte
 
 	header, _ := strconv.Atoi(params["header"])
 	amount, _ := strconv.Atoi(params["amount"])

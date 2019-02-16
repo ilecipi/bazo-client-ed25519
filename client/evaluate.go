@@ -25,7 +25,7 @@ func getRelevantBlocks(relevantBlockHeaders []*protocol.Block) (relevantBlocks [
 	return relevantBlocks, nil
 }
 
-func getRelevantBlockHeaders(pubKey [64]byte) (relevantHeadersBeneficiary []*protocol.Block, relevantHeadersConfigBF []*protocol.Block) {
+func getRelevantBlockHeaders(pubKey [32]byte) (relevantHeadersBeneficiary []*protocol.Block, relevantHeadersConfigBF []*protocol.Block) {
 	for _, blockHeader := range blockHeaders {
 		if blockHeader.Beneficiary == pubKey {
 			relevantHeadersBeneficiary = append(relevantHeadersBeneficiary, blockHeader)

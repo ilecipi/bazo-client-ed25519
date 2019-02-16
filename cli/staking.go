@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"crypto/rsa"
 	"errors"
 	"github.com/bazo-blockchain/bazo-client/network"
 	"github.com/bazo-blockchain/bazo-client/util"
@@ -95,14 +94,20 @@ func toggleStaking(args *stakingArgs, logger *log.Logger) error {
 		return err
 	}
 
-	privKey, err := crypto.ExtractECDSAKeyFromFile(args.walletFile)
+	privKey, err := crypto.ExtractEDPrivKeyFromFile(args.walletFile)
 	if err != nil {
 		return err
 	}
+	var accountPubKey [32]byte;
+	copy(accountPubKey[:], privKey[32:])
 
-	accountPubKey := crypto.GetAddressFromPubKey(&privKey.PublicKey)
-
-	commPubKey := &rsa.PublicKey{}
+	//TODO: Fix commPubKey
+	//commPubKey := &rsa.PublicKey{}
+	commPubKey, err := crypto.ExtractEDPublicKeyFromFile(args.commitment)
+	if err != nil {
+		return err
+	}
+	/*
 	if args.stakingValue {
 		commPrivKey, err := crypto.ExtractRSAKeyFromFile(args.commitment)
 		if err != nil {
@@ -110,6 +115,7 @@ func toggleStaking(args *stakingArgs, logger *log.Logger) error {
 		}
 		commPubKey = &commPrivKey.PublicKey
 	}
+	*/
 
 	tx, err := protocol.ConstrStakeTx(
 		byte(args.header),

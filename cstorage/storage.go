@@ -65,7 +65,7 @@ func Init(dbname string) (err error) {
 	return nil
 }
 
-func RetrieveState() (state map[[64]byte]*protocol.Account)  {
+func RetrieveState() (state map[[32]byte]*protocol.Account)  {
 	return miner.GetState()
 }
 

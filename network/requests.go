@@ -89,7 +89,7 @@ func TxReq(txType uint8, txHash [32]byte) error {
 	return nil
 }
 
-func AccReq(root bool, address [64]byte) error {
+func AccReq(root bool, address [32]byte) error {
 	p := peers.getRandomPeer()
 	if p == nil {
 		return errors.New("Couldn't get a connection, request not transmitted.")

@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"crypto/ecdsa"
 	"errors"
 	"fmt"
 	"github.com/bazo-blockchain/bazo-client/network"
@@ -11,6 +10,7 @@ import (
 	"github.com/bazo-blockchain/bazo-miner/protocol"
 	"github.com/ethereum/go-ethereum/ethdb"
 	"github.com/urfave/cli"
+	"golang.org/x/crypto/ed25519"
 	"log"
 )
 
@@ -82,14 +82,14 @@ func sendFunds(args *fundsArgs, logger *log.Logger) error {
 		return err
 	}
 
-	fromPrivKey, err := crypto.ExtractECDSAKeyFromFile(args.fromWalletFile)
+	fromPrivKey, err := crypto.ExtractEDPrivKeyFromFile(args.fromWalletFile)
 	if err != nil {
 		return err
 	}
 
 
 
-	var toPubKey *ecdsa.PublicKey
+	var toPubKey ed25519.PublicKey
 	if len(args.toWalletFile) == 0 {
 		if len(args.toAddress) == 0 {
 			return errors.New(fmt.Sprintln("No recipient specified"))
@@ -98,24 +98,24 @@ func sendFunds(args *fundsArgs, logger *log.Logger) error {
 				return errors.New(fmt.Sprintln("Invalid recipient address"))
 			}
 
-			runes := []rune(args.toAddress)
-			pub1 := string(runes[:64])
-			pub2 := string(runes[64:])
+			//runes := []rune(args.toAddress)
+			//pub1 := string(runes[:64])
+			//pub2 := string(runes[64:])
 
-			toPubKey, err = crypto.GetPubKeyFromString(pub1, pub2)
+			toPubKey, err = crypto.ExtractEDPublicKeyFromFile(args.toAddress)
 			if err != nil {
 				return err
 			}
 		}
 	} else {
-		toPubKey, err = crypto.ExtractECDSAPublicKeyFromFile(args.toWalletFile)
+		toPubKey, err = crypto.ExtractEDPublicKeyFromFile(args.toWalletFile)
 		if err != nil {
 			return err
 		}
 	}
-
-	fromAddress := crypto.GetAddressFromPubKey(&fromPrivKey.PublicKey)
-	toAddress := crypto.GetAddressFromPubKey(toPubKey)
+	var fromAddress [32]byte;
+	copy(fromAddress[:], fromPrivKey[32:])
+	toAddress := crypto.GetAddressFromPubKeyED(toPubKey)
 
 	////retrieve state form the network
 	//currentState, err := network.StateReq(util.Config.BootstrapIpport, util.Config.ThisIpport)

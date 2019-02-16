@@ -46,18 +46,18 @@ func checkAccount(args *accountArgs, logger *log.Logger) error {
 		return err
 	}
 
-	var address [64]byte
+	var address [32]byte
 	if len(args.address) == 128 {
 		newPubInt, _ := new(big.Int).SetString(args.address, 16)
 		copy(address[:], newPubInt.Bytes())
 	} else {
-		privKey, err := crypto.ExtractECDSAKeyFromFile(args.walletFile)
+		privKey, err := crypto.ExtractEDPublicKeyFromFile(args.walletFile)
 		if err != nil {
 			logger.Printf("%v\n", err)
 			return err
 		}
 
-		address = crypto.GetAddressFromPubKey(&privKey.PublicKey)
+		address = crypto.GetAddressFromPubKeyED(privKey)
 	}
 
 	logger.Printf("My address: %x\n", address)
