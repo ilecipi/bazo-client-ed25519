@@ -18,6 +18,7 @@ var (
 	UnsignedContractTx    = make(map[[32]byte]*protocol.ContractTx)
 	UnsignedConfigTx = make(map[[32]byte]*protocol.ConfigTx)
 	UnsignedFundsTx  = make(map[[32]byte]*protocol.FundsTx)
+	SignedIotTx = make(map[[32]byte]*protocol.IotTx)
 )
 
 //Update allBlockHeaders to the latest header. Start listening to broadcasted headers after.
