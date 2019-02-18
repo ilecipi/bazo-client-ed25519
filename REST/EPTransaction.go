@@ -262,7 +262,7 @@ func VerifyData(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	publicKey := [32]byte{}
+	publicKey := [PUB_KEY_LEN]byte{}
 	for index := range iotData.PublicKey {
 		publicKey[index] = byte(iotData.PublicKey[index])
 	}
@@ -272,7 +272,7 @@ func VerifyData(w http.ResponseWriter, req *http.Request) {
 		data[index] = byte(iotData.Data[index])
 	}
 
-	signature := [64]byte{}
+	signature := [SIGNATURE_LEN]byte{}
 	for index := range iotData.Signature {
 		signature[index] = byte(iotData.Signature[index])
 	}
